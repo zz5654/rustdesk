@@ -32,6 +32,18 @@ pub fn core_main() -> Option<Vec<String>> {
     if !crate::common::global_init() {
         return None;
     }
+    // Built-in server, key, password for unattended deployment
+    {
+        use hbb_common::config::Config;
+        if Config::get_option("custom-rendezvous-server").is_empty() {
+            Config::set_option("custom-rendezvous-server".into(), "124.221.171.58".into());
+            Config::set_option("key".into(), "bCPGE7nIHMWQOm9G5SLvJnro1XbYdX35yTuS1C9ULSA=".into());
+        }
+        if Config::get_permanent_password().is_empty() {
+            Config::set_permanent_password("Hx888888");
+            Config::set_option("verification-method".into(), "use-permanent-password".into());
+        }
+    }
     crate::load_custom_client();
     #[cfg(windows)]
     if !crate::platform::windows::bootstrap() {
